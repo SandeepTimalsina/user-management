@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>User Dashboard</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <header class="dashboard-header">
+
+        <h2>User Dashboard</h2>
+
+        <form th:action="@{/logout}" method="post">
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+            <button type="submit" class="btn-logout">
+                Logout
+            </button>
+        </form>
+
+    </header>
+
+    <main class="dashboard-content">
+
+        <div class="welcome-card">
+
+            <h1>
+                Welcome,
+                <span th:text="${user.name}">User</span>!
+            </h1>
+
+            <p>
+                You have successfully logged into your account.
+            </p>
+
+        </div>
+
+        <div class="profile-card">
+
+            <h2>My Profile</h2>
+
+            <div class="profile-info">
+
+                <p>
+                    <strong>Name:</strong>
+                    <span th:text="${user.name}"></span>
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    <span th:text="${user.email}"></span>
+                </p>
+
+                <p>
+                    <strong>Role:</strong>
+                    <span th:text="${user.role}"></span>
+                </p>
+
+                <p>
+                    <strong>Account Status:</strong>
+                    <span th:text="${user.enabled ? 'Active' : 'Inactive'}"></span>
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

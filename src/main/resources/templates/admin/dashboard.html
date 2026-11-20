@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <header class="dashboard-header">
+        <h2>Super Admin Panel</h2>
+
+        <form th:action="@{/logout}" method="post">
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
+    </header>
+
+    <main class="admin-content">
+
+        <div class="admin-welcome">
+            <h1>Welcome, Super Admin!</h1>
+            <p>Manage your registered users from here.</p>
+        </div>
+
+        <!-- Statistics -->
+        <section class="stats-container">
+
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <p th:text="${totalUsers}">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Active Users</h3>
+                <p th:text="${activeUsers}">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Inactive Users</h3>
+                <p th:text="${inactiveUsers}">0</p>
+            </div>
+
+        </section>
+
+        <!-- User Table -->
+        <section class="users-section">
+
+            <div class="users-heading">
+                <h2>Manage Users</h2>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="users-table">
+
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.name}"></td>
+                        <td th:text="${user.email}"></td>
+
+                        <td>
+                            <span th:if="${user.enabled}" class="status-active">
+                                Active
+                            </span>
+                            <span th:unless="${user.enabled}" class="status-inactive">
+                                Inactive
+                            </span>
+                        </td>
+
+                        <td th:text="${user.createdAt != null
+                            ? #temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')
+                            : 'N/A'}"></td>
+
+                        <td>
+                            <span class="action-placeholder">
+                                Edit / Delete coming next
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(users)}">
+                        <td colspan="6" class="empty-message">
+                            No registered users found.
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>
