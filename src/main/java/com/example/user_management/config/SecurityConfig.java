@@ -41,7 +41,8 @@ public class SecurityConfig {
                                 "/login",
                                 "/register",
                                 "/css/**",
-                                "/images/**"
+                                "/images/**",
+                                "/actuator/prometheus"
                         ).permitAll()
 
                         .requestMatchers("/admin/**").hasRole("SUPERADMIN")
