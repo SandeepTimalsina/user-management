@@ -1,0 +1,36 @@
+name: Build and Deploy User Management
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t user-management:${GITHUB_SHA} \
+            .
+
+      - name: Deploy application
+        run: |
+          IMAGE_TAG=${GITHUB_SHA} docker compose \
+            --env-file /opt/user-management/.env \
+            -f /opt/user-management/compose.yaml \
+            up -d --no-deps --force-recreate user-management
+
+      - name: Verify deployment
+        run: |
+          sleep 10
+          docker ps --filter name=user-management
+          curl --fail http://localhost:8080/ || exit 1
